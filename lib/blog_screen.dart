@@ -21,72 +21,30 @@ class _BlogScreenState extends State<BlogScreen> {
     User userData = Provider.of<User>(context);
     DateTime dt = DateTime.now();
     return SafeArea(
-      child: Material(
-        child: Container(
-          child: Column(
-            children: <Widget>[
-              Container(
-                height: 60,
-                width: double.infinity,
-                color: Colors.indigo,
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 8, horizontal: 15),
-                  child: Stack(
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Eye(dt.hour == 3 && dt.minute == 33),
-                        ],
-                      ),
-                      Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (_) => AddBlogScreen()));
-                              },
-                              child: Icon(
-                                Icons.add,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      Center(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            GestureDetector(
-                              onTap: () {
-                                FirebaseAuth.instance.signOut();
-                              },
-                              child: Text(
-                                'Sign out',
-                                style: Constants.linkTextStyle,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Constants.primaryColor,
+          title:
+              SizedBox(height: Constants.appBarHeight * 0.8, child: Eye(false)),
+          centerTitle: true,
+          actions: <Widget>[
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: (_) => AddBlogScreen()));
+              },
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 16),
+                child: Center(
+                  child: Icon(Icons.add),
                 ),
               ),
-              Expanded(
-                  child: Container(
-                color: Colors.white,
-                child: Center(
-                  child: userData == null ? MySpinner() : Text(userData.name),
-                ),
-              )),
-            ],
+            )
+          ],
+        ),
+        body: Container(
+          child: Center(
+            child: Text('Moin'),
           ),
         ),
       ),

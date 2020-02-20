@@ -5,6 +5,7 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 class Constants {
   static double height;
   static double width;
+  static double appBarHeight = AppBar().preferredSize.height;
 
   static setDeviceSize(context) {
     width = MediaQuery.of(context).size.width;
@@ -16,6 +17,7 @@ class Constants {
   static TextStyle fieldTextStyle = TextStyle(color: Colors.white70);
   static TextStyle normalTextStyle = TextStyle(color: Colors.white70);
   static TextStyle linkTextStyle = TextStyle(color: Colors.white);
+  static Color primaryColor = Colors.indigo;
 
   static showErrorMessage(context, String errorMessage) {
     Alert(context: context, title: 'Error', desc: errorMessage, buttons: [

@@ -61,7 +61,7 @@ class MyTextFormField extends StatelessWidget {
             const Radius.circular(30.0),
           ),
           borderSide: BorderSide(
-            color: isBackgroundLight ? Colors.black54 : Colors.blueAccent,
+            color: isBackgroundLight ? Colors.black54 : Colors.white54,
             width: 1.3,
           ),
         ),
