@@ -1,6 +1,9 @@
+import 'package:blog_app/BlogData.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'Blog.dart';
 import 'blog_screen.dart';
 import 'login_screen.dart';
 import 'UserData.dart';
@@ -75,8 +78,12 @@ class _HomeScreenState extends State<HomeScreen> {
     return _user == null
         ? LoginScreen()
         : MultiProvider(providers: [
-            FutureProvider<User>.value(
-                value: UserData.getUserData(_user.uid)), // Provider here
+            FutureProvider<User>.value(value: UserData.getUserData(_user.uid)),
+            StreamProvider<List<Blog>>.value(
+              value: BlogData.getBlogList(),
+              catchError: (_, err) => null,
+              initialData: [Blog(id: '1')],
+            ) // Provider here
           ], child: BlogScreen());
   }
 }
