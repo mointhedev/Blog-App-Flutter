@@ -1,10 +1,13 @@
 import 'package:blog_app/BlogData.dart';
+import 'package:blog_app/spinner.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'Blog.dart';
 import 'blog_screen.dart';
+import 'constants.dart';
+import 'eye_widget.dart';
 import 'login_screen.dart';
 import 'UserData.dart';
 
@@ -52,11 +55,12 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
 
-  // bool isCompleted = false;
+  bool onceChecked = false;
 
   @override
   Widget build(BuildContext context) {
     FirebaseUser _user = Provider.of<FirebaseUser>(context);
+
     print('User logged in $_user');
 
 //    Widget getScreen() {
@@ -74,6 +78,22 @@ class _HomeScreenState extends State<HomeScreen> {
 //
 //      return CircularProgressIndicator();
 //    }
+
+    if (!onceChecked && _user == null) {
+      onceChecked = true;
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: Constants.primaryColor,
+          centerTitle: true,
+        ),
+        body: Container(
+          color: Colors.white70,
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
+        ),
+      );
+    }
 
     return _user == null
         ? LoginScreen()

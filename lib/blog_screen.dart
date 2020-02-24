@@ -1,10 +1,9 @@
-import 'package:blog_app/BlogData.dart';
 import 'package:blog_app/UserData.dart';
 import 'package:blog_app/constants.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter_swiper/flutter_swiper.dart';
+import 'package:blog_app/my_image.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+import 'blog_detail.dart';
 import 'constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +38,7 @@ class _BlogScreenState extends State<BlogScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Constants.setDeviceSize(context);
     var blogs = Provider.of<List<Blog>>(context);
     print('Blogs: $blogs');
 //    print('Blog title ${blogs.first.title}');
@@ -87,10 +87,8 @@ class _BlogScreenState extends State<BlogScreen> {
                             children: blogs
                                 .getRange(0, 3)
                                 .map((blog) => SlidingCard(
-                                      name: blog.title,
+                                      blog: blog,
                                       offset: pageOffset - blogs.indexOf(blog),
-                                      date: blog.time,
-                                      url: blog.imageURL,
                                     ))
                                 .toList()),
                       )),
@@ -108,84 +106,94 @@ class _BlogScreenState extends State<BlogScreen> {
                               .map((blog) => Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 10, vertical: 2),
-                                    child: Card(
-                                      elevation: 4,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(32)),
-                                      child: Container(
-                                        height: Constants.appBarHeight * 2,
-                                        padding: EdgeInsets.all(17),
-                                        child: Row(
-                                          children: <Widget>[
-                                            ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.horizontal(
-                                                      left:
-                                                          Radius.circular(20)),
-                                              child: SizedBox(
-                                                  height:
-                                                      Constants.appBarHeight *
-                                                          1.5,
-                                                  width:
-                                                      Constants.appBarHeight *
-                                                          1.5,
-                                                  child: FittedBox(
-                                                      child: ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.horizontal(
-                                                            left:
-                                                                Radius.circular(
-                                                                    20),
-                                                            right:
-                                                                Radius.circular(
-                                                                    20)),
-                                                    child: Image.network(
-                                                      blog.imageURL,
-                                                      height: Constants
-                                                              .appBarHeight *
-                                                          1.5,
-                                                      width: Constants
-                                                              .appBarHeight *
-                                                          1.5,
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                  ))),
-                                            ),
-                                            Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 16),
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: <Widget>[
-                                                  Text(
-                                                    blog.title,
-                                                    style: TextStyle(
-                                                        fontSize: 17,
-                                                        fontWeight:
-                                                            FontWeight.w500),
-                                                  ),
-                                                  Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            top: 5),
-                                                    child: Text(
-                                                      DateFormat.yMMMd()
-                                                          .format(blog.time),
-                                                      style: TextStyle(
-                                                          fontSize: 12,
-                                                          fontWeight:
-                                                              FontWeight.w300),
-                                                    ),
-                                                  ),
-                                                ],
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (_) =>
+                                                    BlogDetailScreen(blog)));
+                                      },
+                                      child: Card(
+                                        elevation: 4,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(32)),
+                                        child: Container(
+                                          height: Constants.appBarHeight * 2,
+                                          padding: EdgeInsets.all(17),
+                                          child: Row(
+                                            children: <Widget>[
+                                              ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.horizontal(
+                                                        left: Radius.circular(
+                                                            20)),
+                                                child: SizedBox(
+                                                    height:
+                                                        Constants.appBarHeight *
+                                                            1.5,
+                                                    width:
+                                                        Constants.appBarHeight *
+                                                            1.5,
+                                                    child: FittedBox(
+                                                        child: ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius
+                                                              .horizontal(
+                                                                  left: Radius
+                                                                      .circular(
+                                                                          20),
+                                                                  right: Radius
+                                                                      .circular(
+                                                                          20)),
+                                                      child: MyImage(
+                                                        blog.imageURL,
+                                                        height: Constants
+                                                                .appBarHeight *
+                                                            1.5,
+                                                        width: Constants
+                                                                .appBarHeight *
+                                                            1.5,
+                                                      ),
+                                                    ))),
                                               ),
-                                            ),
-                                          ],
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 16),
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: <Widget>[
+                                                    Text(
+                                                      blog.title,
+                                                      style: TextStyle(
+                                                          fontSize: 17,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              top: 5),
+                                                      child: Text(
+                                                        DateFormat.yMMMd()
+                                                            .format(blog.time),
+                                                        style: TextStyle(
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w300),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),

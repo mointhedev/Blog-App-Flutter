@@ -1,20 +1,20 @@
+import 'package:blog_app/blog_detail.dart';
+import 'package:blog_app/my_image.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'package:intl/intl.dart';
 import 'package:timeago/timeago.dart' as timeAgo;
+import 'Blog.dart';
 import 'constants.dart';
 
 class SlidingCard extends StatelessWidget {
-  final String name; //<-- title of the event
+  final Blog blog; //<-- title of the event
   final double offset;
-  final DateTime date; //<-- date of the event
-  final String url; //<-- name of the image to be displayed
+  //<-- name of the image to be displayed
 
   const SlidingCard({
     Key key,
-    @required this.name,
-    @required this.date,
-    @required this.url,
+    @required this.blog,
     @required this.offset,
   }) : super(key: key);
 
@@ -40,13 +40,16 @@ class SlidingCard extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(32)),
-                    child: Image.network(
-                      //<-- main image
-                      url,
-                      alignment: Alignment(-offset.abs(), 0),
-                      fit: BoxFit.none,
-                      height: Constants.appBarHeight * 4.9,
-                      width: Constants.width,
+                    child: Hero(
+                      tag: blog.id,
+                      child: MyImage(
+                        //<-- main image
+                        blog.imageURL,
+                        alignment: Alignment(-offset.abs(), 0),
+                        boxFit: BoxFit.none,
+                        height: Constants.appBarHeight * 4.9,
+                        width: Constants.width,
+                      ),
                     ),
                   ),
                 ),
@@ -57,8 +60,7 @@ class SlidingCard extends StatelessWidget {
               child: CardContent(
                 //<--replace the Container with CardContent
                 offset: gauss,
-                name: name,
-                date: date,
+                blog: blog,
               ),
               //<-- will be replaced soon :)
             ),
@@ -71,13 +73,8 @@ class SlidingCard extends StatelessWidget {
 
 class CardContent extends StatelessWidget {
   final double offset;
-  final String name;
-  final DateTime date;
-  const CardContent(
-      {Key key,
-      @required this.name,
-      @required this.date,
-      @required this.offset})
+  final Blog blog;
+  const CardContent({Key key, @required this.blog, @required this.offset})
       : super(key: key);
 
   @override
@@ -90,14 +87,14 @@ class CardContent extends StatelessWidget {
           Transform.translate(
             offset: Offset(8 * offset, 0), //<-- translate the name label
 
-            child: Text(name, style: TextStyle(fontSize: 20)),
+            child: Text(blog.title, style: TextStyle(fontSize: 20)),
           ),
           SizedBox(height: 8),
           Transform.translate(
             offset: Offset(32 * offset, 0), //<-- translate the name label
 
             child: Text(
-              DateFormat.yMMMd().format(date),
+              DateFormat.yMMMd().format(blog.time),
               style: TextStyle(color: Colors.grey),
             ),
           ),
@@ -114,7 +111,12 @@ class CardContent extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(32),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (_) => BlogDetailScreen(blog)));
+                  },
                 ),
               ),
               Spacer(),
@@ -122,7 +124,7 @@ class CardContent extends StatelessWidget {
                 offset: Offset(32 * offset, 0), //<-- translate the price label
 
                 child: Text(
-                  timeAgo.format(date),
+                  timeAgo.format(blog.time),
                   style: TextStyle(
                     fontWeight: FontWeight.w300,
                     fontSize: 16,
