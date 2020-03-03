@@ -1,13 +1,11 @@
 import 'package:blog_app/BlogData.dart';
-import 'package:blog_app/spinner.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'Blog.dart';
 import 'blog_screen.dart';
 import 'constants.dart';
-import 'eye_widget.dart';
+import 'firebase_notif.dart';
 import 'login_screen.dart';
 import 'UserData.dart';
 
@@ -53,6 +51,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    FirebaseNotifications().setUpFirebase();
   }
 
   bool onceChecked = false;
