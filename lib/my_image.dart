@@ -23,11 +23,11 @@ class MyImage extends StatelessWidget {
       fit: boxFit,
       imageUrl: url,
       placeholder: (context, url) => Container(
-        height: 8,
-        width: 8,
-        color: Colors.grey,
+        margin: EdgeInsets.all(20),
+        height: 26,
+        width: 26,
         child: Center(
-          child: CircularProgressIndicator(),
+          child: FittedBox(child: CircularProgressIndicator()),
         ),
       ),
       errorWidget: (context, url, error) => new Icon(Icons.error),

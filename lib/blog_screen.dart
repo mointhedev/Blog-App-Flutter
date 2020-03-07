@@ -1,8 +1,10 @@
 import 'dart:ui';
 import 'package:blog_app/UserData.dart';
 import 'package:blog_app/constants.dart';
+import 'package:blog_app/firebase_notif.dart';
 import 'package:blog_app/my_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:sticky_header_list/sticky_header_list.dart';
@@ -25,7 +27,7 @@ class BlogScreen extends StatefulWidget {
 class _BlogScreenState extends State<BlogScreen> {
   PageController pageController;
   double pageOffset = 0;
-
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   @override
   void initState() {
     super.initState();
@@ -65,6 +67,7 @@ class _BlogScreenState extends State<BlogScreen> {
                     children: <Widget>[
                       GestureDetector(
                         onTap: () {
+                          _firebaseMessaging.unsubscribeFromTopic('all');
                           FirebaseAuth.instance.signOut();
                           Navigator.of(context).push(
                               MaterialPageRoute(builder: (_) => LoginScreen()));
@@ -124,7 +127,6 @@ class _BlogScreenState extends State<BlogScreen> {
                       RegularRow(
                         height: 30,
                         child: Container(
-                            color: Colors.white,
                             padding: EdgeInsets.all(18),
                             child: Text(
                               'Recent',
@@ -133,10 +135,10 @@ class _BlogScreenState extends State<BlogScreen> {
                             )),
                       ),
                       RegularRow(
-                        height: Constants.appBarHeight * 7.5,
+                        height: Constants.appBarHeight * 7.2,
                         child: Container(
                             child: SizedBox(
-                          height: Constants.appBarHeight * 7.5,
+                          height: Constants.appBarHeight * 7.2,
                           child: PageView(
                               controller: pageController,
                               children: blogs

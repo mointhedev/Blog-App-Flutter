@@ -36,13 +36,13 @@ class _LoginScreenState extends State<LoginScreen> {
     Constants.setDeviceSize(context);
     return SafeArea(
       child: Scaffold(
-        body: GestureDetector(
-          onTap: () {
-            focusNode1.unfocus();
-            focusNode2.unfocus();
-            focusNode3.unfocus();
-          },
-          child: SingleChildScrollView(
+        body: SingleChildScrollView(
+          child: GestureDetector(
+            onTap: () {
+              focusNode1.unfocus();
+              focusNode2.unfocus();
+              focusNode3.unfocus();
+            },
             child: Container(
               color: Colors.indigo,
               height: Constants.height,

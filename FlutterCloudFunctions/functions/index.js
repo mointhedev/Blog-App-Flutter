@@ -5,19 +5,25 @@ admin.initializeApp(functions.config().functions);
 
 var newData;
 
-exports.messageTrigger = functions.firestore.document('blogs/{blogId}').onCreate((snapshot, context) => {
+exports.newBlogTrigger = functions.firestore.document('blogs/{blogId}').onCreate((snapshot, context) => {
 
     if (snapshot.empty) {
         console.log('No devices');
         return;
     }
 
+
     newData = snapshot.data();
 
 
     var payLoad = {
         notification: { title: 'New Article Published', body: newData['title'], sound: 'default' },
-        data: { click_action: 'FLUTTER_NOTIFICATION_CLICK ', message: 'Sample Push Message' },
+        data: { click_action: 'FLUTTER_NOTIFICATION_CLICK ', 
+        //blog_id: blog_id, 
+        title: newData['title'],
+        content: newData['content'],
+        image_url: newData['image_url']
+     },
     };
 
     return admin.messaging().sendToTopic('all', payLoad)

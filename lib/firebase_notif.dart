@@ -20,13 +20,13 @@ class FirebaseNotifications {
 
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
-        print('on message $message');
+        print('On message : $message');
       },
       onResume: (Map<String, dynamic> message) async {
-        print('on resume $message');
+        print('On resume : $message');
       },
       onLaunch: (Map<String, dynamic> message) async {
-        print('on launch $message');
+        print('On launch : $message');
       },
     );
   }

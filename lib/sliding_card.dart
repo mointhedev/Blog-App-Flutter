@@ -1,5 +1,6 @@
 import 'package:blog_app/blog_detail.dart';
 import 'package:blog_app/my_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'dart:math' as math;
 import 'package:intl/intl.dart';
@@ -33,7 +34,8 @@ class SlidingCard extends StatelessWidget {
             ClipRRect(
               //<--clipping image
               borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
-              child: SizedBox(
+              child: Container(
+                padding: EdgeInsets.only(top: 16),
                 height: Constants.appBarHeight * 4.2,
                 width: Constants.width * 0.7,
                 child: FittedBox(
@@ -47,8 +49,8 @@ class SlidingCard extends StatelessWidget {
                         blog.imageURL,
                         alignment: Alignment(-offset.abs(), 0),
                         boxFit: BoxFit.none,
-                        height: Constants.appBarHeight * 4.9,
-                        width: Constants.width,
+                        height: Constants.appBarHeight * 4.7,
+                        width: Constants.width * 0.8,
                       ),
                     ),
                   ),
@@ -89,7 +91,7 @@ class CardContent extends StatelessWidget {
 
             child: FittedBox(
                 fit: BoxFit.scaleDown,
-                child: Text(blog.title, style: TextStyle(fontSize: 16))),
+                child: Text(blog.title, style: TextStyle(fontSize: 18))),
           ),
           SizedBox(height: 8),
           Transform.translate(
@@ -97,7 +99,7 @@ class CardContent extends StatelessWidget {
 
             child: Text(
               DateFormat.yMMMd().format(blog.time),
-              style: TextStyle(color: Colors.grey),
+              style: TextStyle(color: Colors.grey, fontSize: 12),
             ),
           ),
           Spacer(),
@@ -129,7 +131,7 @@ class CardContent extends StatelessWidget {
                   timeAgo.format(blog.time),
                   style: TextStyle(
                     fontWeight: FontWeight.w300,
-                    fontSize: 16,
+                    fontSize: 14,
                   ),
                 ),
               ),
