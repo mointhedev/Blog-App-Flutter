@@ -78,22 +78,6 @@ class _HomeScreenState extends State<HomeScreen> {
 //      return CircularProgressIndicator();
 //    }
 
-    if (!onceChecked && _user == null) {
-      onceChecked = true;
-      return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Constants.primaryColor,
-          centerTitle: true,
-        ),
-        body: Container(
-          color: Colors.white70,
-          child: Center(
-            child: CircularProgressIndicator(),
-          ),
-        ),
-      );
-    }
-
     return _user == null
         ? LoginScreen()
         : MultiProvider(providers: [

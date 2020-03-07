@@ -8,13 +8,14 @@ class FirebaseNotifications {
   void setUpFirebase() {
     _firebaseMessaging = FirebaseMessaging();
     firebaseCloudMessaging_Listeners();
+    _firebaseMessaging.subscribeToTopic('all');
   }
 
   void firebaseCloudMessaging_Listeners() {
     if (Platform.isIOS) iOS_Permission();
 
     _firebaseMessaging.getToken().then((token) {
-      print(token);
+      print('Device Token : $token');
     });
 
     _firebaseMessaging.configure(

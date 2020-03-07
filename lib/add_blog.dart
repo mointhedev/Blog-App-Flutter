@@ -31,186 +31,201 @@ class _AddBlogScreenState extends State<AddBlogScreen> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Constants.primaryColor,
-          title:
-              SizedBox(height: Constants.appBarHeight * 0.8, child: Eye(false)),
+          title: SizedBox(
+              height: Constants.appBarHeight * 0.8,
+              child: Eye(dt.hour == 3 && dt.minute == 33)),
           centerTitle: true,
         ),
-        body: SingleChildScrollView(
-          child: Container(
-            width: double.infinity,
-            height: Constants.height - Constants.appBarHeight,
-            color: Colors.white,
-            padding: EdgeInsets.all(8),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.only(top: 8),
-                    child: Padding(
+        body: GestureDetector(
+          onTap: () {
+            titleNode.unfocus();
+            contentNode.unfocus();
+          },
+          child: SingleChildScrollView(
+            child: Container(
+              width: double.infinity,
+              height: Constants.height - Constants.appBarHeight,
+              color: Colors.white,
+              padding: EdgeInsets.all(8),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.only(top: 8),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: MyTextFormField(
+                          // ignore: missing_return
+                          validator: (value) {
+                            // ignore: missing_return
+                            if (value.toString().trim().length == 0) {
+                              return 'Please enter a title';
+                            }
+
+                            if (value.toString().trim().length == 0) {
+                              return 'Title has to be less than';
+                            }
+                          },
+                          onChanged: (value) {
+                            if (hasError) _formKey.currentState.validate();
+                          },
+                          controller: titleController,
+                          maxLength: 45,
+                          focusNode: titleNode,
+                          hintText: 'Title',
+                          isBackgroundLight: true,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          SizedBox(
+                            width: Constants.width / 10,
+                          ),
+                          image == null
+                              ? Text(
+                                  'Select Title Image : ',
+                                  style: TextStyle(fontWeight: FontWeight.w500),
+                                )
+                              : SizedBox(
+                                  height: Constants.appBarHeight,
+                                  width: Constants.appBarHeight * 1.5,
+                                  child: FittedBox(
+                                    child: Image.file(image),
+                                  ),
+                                ),
+                          MyButton(
+                            onPressed: () async {
+                              var myImage = await ImagePicker.pickImage(
+                                  source: ImageSource.gallery);
+
+                              setState(() {
+                                image = myImage;
+                              });
+                            },
+                            text: image == null
+                                ? 'Open Gallery'
+                                : 'Change Picture',
+                            color: Colors.blueAccent,
+                          ),
+                          SizedBox(
+                            width: Constants.width / 10,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: MyTextFormField(
+                        focusNode: contentNode,
+                        controller: contentController,
+                        maxLines: 12,
+                        hintText: 'Content',
+                        isBackgroundLight: true,
+                        onChanged: (value) {
+                          if (hasError) _formKey.currentState.validate();
+                        },
                         // ignore: missing_return
                         validator: (value) {
                           // ignore: missing_return
                           if (value.toString().trim().length == 0) {
-                            return 'Please enter a title';
+                            return 'Please enter some content';
+                          }
+
+                          if (value.toString().trim().length < 150) {
+                            return "Enter at least 150 letters. Remaining: ${value.toString().trim().length - 150}";
                           }
                         },
-                        onChanged: (value) {
-                          if (hasError) _formKey.currentState.validate();
-                        },
-                        controller: titleController,
-                        hintText: 'Title',
-                        isBackgroundLight: true,
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: <Widget>[
-                        SizedBox(
-                          width: Constants.width / 10,
-                        ),
-                        image == null
-                            ? Text(
-                                'Select Title Image : ',
-                                style: TextStyle(fontWeight: FontWeight.w500),
-                              )
-                            : SizedBox(
-                                height: Constants.appBarHeight,
-                                width: Constants.appBarHeight * 1.5,
-                                child: FittedBox(
-                                  child: Image.file(image),
-                                ),
-                              ),
-                        MyButton(
-                          onPressed: () async {
-                            var myImage = await ImagePicker.pickImage(
-                                source: ImageSource.gallery);
+                    _isLoading
+                        ? MySpinner(
+                            color: Colors.blueAccent,
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Center(
+                              child: MyButton(
+                                onPressed: () async {
+                                  if (!_formKey.currentState.validate()) {
+                                    setState(() {
+                                      hasError = true;
+                                    });
+                                    return;
+                                  }
+                                  if (image == null) {
+                                    Constants.showErrorMessage(
+                                        context, 'Please select an image');
+                                    return;
+                                  }
 
-                            setState(() {
-                              image = myImage;
-                            });
-                          },
-                          text:
-                              image == null ? 'Open Gallery' : 'Change Picture',
-                          color: Colors.blueAccent,
-                        ),
-                        SizedBox(
-                          width: Constants.width / 10,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: MyTextFormField(
-                      controller: contentController,
-                      maxLines: 12,
-                      hintText: 'Content',
-                      isBackgroundLight: true,
-                      onChanged: (value) {
-                        if (hasError) _formKey.currentState.validate();
-                      },
-                      // ignore: missing_return
-                      validator: (value) {
-                        // ignore: missing_return
-                        if (value.toString().trim().length == 0) {
-                          return 'Please enter some content';
-                        }
+                                  String urlLink;
 
-                        if (value.toString().trim().length < 150) {
-                          return "Enter at least 150 letters. Remaining: ${value.toString().trim().length - 150}";
-                        }
-                      },
-                    ),
-                  ),
-                  _isLoading
-                      ? MySpinner(
-                          color: Colors.blueAccent,
-                        )
-                      : Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: Center(
-                            child: MyButton(
-                              onPressed: () async {
-                                if (!_formKey.currentState.validate()) {
-                                  setState(() {
-                                    hasError = true;
-                                  });
-                                  return;
-                                }
-                                if (image == null) {
-                                  Constants.showErrorMessage(
-                                      context, 'Please select an image');
-                                  return;
-                                }
+                                  if (image != null) {
+                                    setState(() {
+                                      _isLoading = true;
+                                    });
+                                    try {
+                                      print('Firestorage reference');
+                                      StorageReference storageReference =
+                                          FirebaseStorage.instance
+                                              .ref()
+                                              .child(DateTime.now().toString());
+                                      print('Firestorage uploadTask');
 
-                                String urlLink;
+                                      //upload the file to Firebase Storage
+                                      final StorageUploadTask uploadTask =
+                                          storageReference.putFile(image);
 
-                                if (image != null) {
-                                  setState(() {
-                                    _isLoading = true;
-                                  });
-                                  try {
-                                    print('Firestorage reference');
-                                    StorageReference storageReference =
-                                        FirebaseStorage.instance
-                                            .ref()
-                                            .child(DateTime.now().toString());
-                                    print('Firestorage uploadTask');
+                                      print('Firestorage Snapshot');
 
-                                    //upload the file to Firebase Storage
-                                    final StorageUploadTask uploadTask =
-                                        storageReference.putFile(image);
+                                      final StorageTaskSnapshot downloadUrl =
+                                          (await uploadTask.onComplete);
 
-                                    print('Firestorage Snapshot');
+                                      print('Firestorage Getting URL');
 
-                                    final StorageTaskSnapshot downloadUrl =
-                                        (await uploadTask.onComplete);
+                                      urlLink = (await downloadUrl.ref
+                                          .getDownloadURL());
+                                    } catch (error) {
+                                      Constants.showErrorMessage(
+                                          context, error.toString());
+                                    }
+                                  }
 
-                                    print('Firestorage Getting URL');
+                                  Firestore.instance.collection('blogs').add({
+                                    'title': titleController.text.trim(),
+                                    'image_url': urlLink,
+                                    'content': contentController.text.trim(),
+                                    'time': FieldValue.serverTimestamp()
+                                  }).then((value) {
+                                    _formKey.currentState.reset();
+                                    titleController.clear();
+                                    contentController.clear();
+                                    setState(() {
+                                      image = null;
 
-                                    urlLink = (await downloadUrl.ref
-                                        .getDownloadURL());
-                                  } catch (error) {
+                                      _isLoading = false;
+                                    });
+                                  }).catchError((error) {
                                     Constants.showErrorMessage(
                                         context, error.toString());
-                                  }
-                                }
+                                  });
 
-                                Firestore.instance.collection('blogs').add({
-                                  'title': titleController.text.trim(),
-                                  'image_url': urlLink,
-                                  'content': contentController.text.trim(),
-                                  'time': FieldValue.serverTimestamp()
-                                }).then((value) {
-                                  _formKey.currentState.reset();
-                                  titleController.clear();
-                                  contentController.clear();
                                   setState(() {
-                                    image = null;
-
                                     _isLoading = false;
                                   });
-                                }).catchError((error) {
-                                  Constants.showErrorMessage(
-                                      context, error.toString());
-                                });
-
-                                setState(() {
-                                  _isLoading = false;
-                                });
-                              },
-                              text: 'Publish',
-                              color: Colors.blueAccent,
+                                },
+                                text: 'Publish',
+                                color: Colors.blueAccent,
+                              ),
                             ),
-                          ),
-                        )
-                ],
+                          )
+                  ],
+                ),
               ),
             ),
           ),

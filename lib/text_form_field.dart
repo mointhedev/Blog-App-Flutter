@@ -10,6 +10,7 @@ class MyTextFormField extends StatelessWidget {
   final Function onChanged;
   final bool isBackgroundLight;
   final int maxLines;
+  final int maxLength;
 
   MyTextFormField(
       {this.validator,
@@ -20,12 +21,14 @@ class MyTextFormField extends StatelessWidget {
       this.obscureText = false,
       this.onChanged,
       this.isBackgroundLight = false,
-      this.maxLines = 1});
+      this.maxLines = 1,
+      this.maxLength});
 
   @override
   Widget build(BuildContext context) {
     Color color = isBackgroundLight ? Colors.grey : Colors.white70;
     return TextFormField(
+      maxLength: maxLength,
       maxLines: maxLines,
       // ignore: missing_return
       onChanged: onChanged,

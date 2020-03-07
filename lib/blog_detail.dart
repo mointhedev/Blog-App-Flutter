@@ -1,5 +1,7 @@
 import 'package:blog_app/my_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 
 import 'Blog.dart';
 import 'constants.dart';
@@ -17,99 +19,126 @@ class BlogDetailScreen extends StatefulWidget {
 class _BlogDetailScreenState extends State<BlogDetailScreen> {
   @override
   Widget build(BuildContext context) {
+    double screenSize = Constants.height - Constants.appBarHeight;
+    DateTime dt = DateTime.now();
     return Scaffold(
+      backgroundColor: Colors.black,
       appBar: AppBar(
-        backgroundColor: Constants.primaryColor,
-        title:
-            SizedBox(height: Constants.appBarHeight * 0.8, child: Eye(false)),
         centerTitle: true,
+        title: SizedBox(
+            height: Constants.appBarHeight * 0.8,
+            child: Eye(dt.hour == 3 && dt.minute == 33)),
+        backgroundColor: Colors.indigo,
       ),
-      body: SingleChildScrollView(
-        child: Container(
-          height: Constants.height - Constants.appBarHeight,
-          color: Colors.white,
-          child: ListView(
-            children: <Widget>[
-              Stack(
-                children: <Widget>[
+      body: CustomScrollView(
+        slivers: <Widget>[
+          SliverAppBar(
+            backgroundColor: Colors.black,
+            automaticallyImplyLeading: false,
+            expandedHeight: screenSize * 0.45,
+            flexibleSpace: FlexibleSpaceBar(
+              collapseMode: CollapseMode.parallax,
+              background: Container(
+                height: screenSize * 0.5,
+                width: Constants.width,
+                decoration: BoxDecoration(
+                    image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: NetworkImage(widget.blog.imageURL))),
+                child: Stack(children: <Widget>[
+//                  MyImage(
+//                    widget.blog.imageURL,
+//                    height: Constants.appBarHeight * 6,
+//                    width: Constants.width,
+//                    boxFit: BoxFit.cover,
+//                  ),
                   Container(
-                    height: Constants.height * 0.3,
-                    width: double.infinity,
-                    color: Colors.grey,
-                    child: FittedBox(
-                      fit: BoxFit.fitWidth,
-                      child: Hero(
-                        tag: widget.blog.id,
-                        child: MyImage(
-                          widget.blog.imageURL,
-                          height: Constants.height * 0.3,
-                          width: Constants.width,
+                    height: screenSize * 0.5,
+                    width: Constants.width,
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                            colors: [
+//                          Colors.black,
+                          Colors.black,
+                          Colors.black54,
+                          Colors.black26,
+                          Colors.transparent,
+                          Colors.transparent,
+                          Colors.transparent
+                        ])),
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 26, bottom: 16, right: 26),
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
+                            widget.blog.title,
+                            style: TextStyle(fontSize: 20, color: Colors.white),
+                          ),
+                        ),
+                      ),
+//                      ClipRRect(
+//                          borderRadius: BorderRadius.only(
+//                            topRight: Radius.circular(30),
+//                            topLeft: Radius.circular(30),
+//                          ),
+//                          child: Container(
+//                            height: 30,
+//                            width: Constants.width,
+//                            color: Colors.white,
+//                          ))
+                    ],
+                  )
+                ]),
+              ),
+            ),
+          ),
+          SliverList(
+            delegate: SliverChildListDelegate(
+              [
+                Column(
+                  children: <Widget>[
+                    ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topRight: Radius.circular(30),
+                        topLeft: Radius.circular(30),
+                      ),
+                      child: Container(
+                        color: Colors.white,
+                        width: double.infinity,
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+                        child: ConstrainedBox(
+                          constraints: new BoxConstraints(
+                            minHeight: screenSize * 0.55 - 48,
+                            minWidth: Constants.width,
+                            maxHeight: double.infinity,
+                            maxWidth: double.infinity,
+                          ),
+                          child: Wrap(
+                            children: <Widget>[
+                              Text(
+                                widget.blog.content,
+                                style: TextStyle(fontSize: 16),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Container(
-                    height: Constants.height * 0.3,
-                    width: double.infinity,
-                    decoration: new BoxDecoration(
-                        gradient: new LinearGradient(
-                      colors: [
-                        Colors.black26.withOpacity(0.3),
-                        Colors.transparent,
-                      ],
-                      stops: [0.0, 1.0],
-                      begin: FractionalOffset.bottomCenter,
-                      end: FractionalOffset.center,
-                    )),
-                  ),
-                  Container(
-                    height: Constants.height - Constants.appBarHeight,
-                    child: ListView(
-                      children: <Widget>[
-                        Container(
-                          color: Colors.transparent,
-                          height: Constants.height * 0.24,
-                          width: double.infinity,
-                        ),
-                        ClipRRect(
-                          borderRadius: BorderRadius.vertical(
-                              top: Radius.circular(Constants.height * 0.06)),
-                          child: Container(
-                            color: Colors.white,
-                            height: Constants.height - Constants.appBarHeight,
-                            padding: EdgeInsets.only(
-                                top: Constants.height * 0.08,
-                                left: Constants.height * 0.04,
-                                bottom: Constants.height * 0.04,
-                                right: Constants.height * 0.04),
-                            child: ListView(
-                              children: <Widget>[
-                                Text(
-                                  widget.blog.title,
-                                  style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18),
-                                ),
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      top: Constants.height * 0.04),
-                                  child: Text(
-                                    widget.blog.content,
-                                    style: TextStyle(fontSize: 16),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }

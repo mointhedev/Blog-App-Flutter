@@ -87,7 +87,9 @@ class CardContent extends StatelessWidget {
           Transform.translate(
             offset: Offset(8 * offset, 0), //<-- translate the name label
 
-            child: Text(blog.title, style: TextStyle(fontSize: 20)),
+            child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(blog.title, style: TextStyle(fontSize: 16))),
           ),
           SizedBox(height: 8),
           Transform.translate(

@@ -24,6 +24,8 @@ dependencies:
   intl: ^0.16.1
   timeago: ^2.0.26
   firebase_messaging: ^6.0.9
+  sticky_headers: ^0.1.8+1
+  sticky_header_list: ^1.0.6
 
 dev_dependencies:
   flutter_test:
