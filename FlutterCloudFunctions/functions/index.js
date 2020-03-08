@@ -17,13 +17,14 @@ exports.newBlogTrigger = functions.firestore.document('blogs/{blogId}').onCreate
 
 
     var payLoad = {
-        notification: { title: 'New Article Published', body: newData['title'], sound: 'default' },
-        data: { click_action: 'FLUTTER_NOTIFICATION_CLICK ', 
-        //blog_id: blog_id, 
-        title: newData['title'],
-        content: newData['content'],
-        image_url: newData['image_url']
-     },
+        notification: { title: 'New article published', body: newData['title'], sound: 'default' },
+        data: {
+            click_action: 'FLUTTER_NOTIFICATION_CLICK ',
+            //blog_id: blog_id, 
+            title: newData['title'],
+            content: newData['content'],
+            image_url: newData['image_url'],
+        },
     };
 
     return admin.messaging().sendToTopic('all', payLoad)

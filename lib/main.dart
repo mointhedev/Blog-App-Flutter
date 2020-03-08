@@ -12,33 +12,29 @@ import 'UserData.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
-  // This widget is the root of your application.
-
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-        providers: [
-          StreamProvider<FirebaseUser>.value(
-            value: FirebaseAuth.instance.onAuthStateChanged, // Provider here
-          ),
-        ],
-        child: MaterialApp(
-          debugShowCheckedModeBanner: false,
-          title: 'Blog App',
-          theme: ThemeData(
-              primarySwatch: Colors.blue,
-              accentColor: Colors.blueAccent,
-              textTheme: TextTheme(
-                  title: Theme.of(context)
-                      .textTheme
-                      .title
-                      .copyWith(color: Colors.white),
-                  button: Theme.of(context)
-                      .textTheme
-                      .button
-                      .copyWith(color: Colors.lightBlue))),
-          home: HomeScreen(),
-        ));
+    return StreamProvider.value(
+      value: FirebaseAuth.instance.onAuthStateChanged,
+      child: MaterialApp(
+        navigatorKey: Constants.navKey,
+        debugShowCheckedModeBanner: false,
+        title: 'Blog App',
+        theme: ThemeData(
+            primarySwatch: Colors.blue,
+            accentColor: Colors.blueAccent,
+            textTheme: TextTheme(
+                title: Theme.of(context)
+                    .textTheme
+                    .title
+                    .copyWith(color: Colors.white),
+                button: Theme.of(context)
+                    .textTheme
+                    .button
+                    .copyWith(color: Colors.lightBlue))),
+        home: HomeScreen(),
+      ),
+    );
   }
 }
 
@@ -51,7 +47,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    FirebaseNotifications().setUpFirebase();
   }
 
   bool onceChecked = false;

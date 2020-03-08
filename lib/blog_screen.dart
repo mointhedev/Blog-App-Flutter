@@ -27,10 +27,10 @@ class BlogScreen extends StatefulWidget {
 class _BlogScreenState extends State<BlogScreen> {
   PageController pageController;
   double pageOffset = 0;
-  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   @override
   void initState() {
     super.initState();
+    FirebaseNotifications().setUpFirebase();
     pageController = PageController(viewportFraction: 0.8);
     pageController.addListener(() {
       setState(() => pageOffset = pageController.page);
@@ -67,10 +67,7 @@ class _BlogScreenState extends State<BlogScreen> {
                     children: <Widget>[
                       GestureDetector(
                         onTap: () {
-                          _firebaseMessaging.unsubscribeFromTopic('all');
                           FirebaseAuth.instance.signOut();
-                          Navigator.of(context).push(
-                              MaterialPageRoute(builder: (_) => LoginScreen()));
                         },
                         child: Center(
                           child: Text(

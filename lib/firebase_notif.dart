@@ -1,18 +1,23 @@
 import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:blog_app/Blog.dart';
+import 'package:flutter/material.dart';
+import 'constants.dart';
+import 'blog_detail.dart';
 
 class FirebaseNotifications {
   FirebaseMessaging _firebaseMessaging;
 
   void setUpFirebase() {
     _firebaseMessaging = FirebaseMessaging();
-    firebaseCloudMessaging_Listeners();
+    firebaseCloudMessagingListeners();
     _firebaseMessaging.subscribeToTopic('all');
+    print('Subscribed Successfully');
   }
 
-  void firebaseCloudMessaging_Listeners() {
-    if (Platform.isIOS) iOS_Permission();
+  void firebaseCloudMessagingListeners() {
+    if (Platform.isIOS) iOSPermission();
 
     _firebaseMessaging.getToken().then((token) {
       print('Device Token : $token');
@@ -21,6 +26,9 @@ class FirebaseNotifications {
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print('On message : $message');
+//        Constants.navKey.currentState.push(MaterialPageRoute(
+//            builder: (_) =>
+//                BlogDetailScreen(Blog.fromMap(message['data'], ''))));
       },
       onResume: (Map<String, dynamic> message) async {
         print('On resume : $message');
@@ -31,7 +39,11 @@ class FirebaseNotifications {
     );
   }
 
-  void iOS_Permission() {
+  void unsubscribe() {
+    _firebaseMessaging.unsubscribeFromTopic('all');
+  }
+
+  void iOSPermission() {
     _firebaseMessaging.requestNotificationPermissions(
         IosNotificationSettings(sound: true, badge: true, alert: true));
     _firebaseMessaging.onIosSettingsRegistered

@@ -6,6 +6,7 @@ class Constants {
   static double height;
   static double width;
   static double appBarHeight = AppBar().preferredSize.height;
+  static GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
 
   static setDeviceSize(context) {
     width = MediaQuery.of(context).size.width;

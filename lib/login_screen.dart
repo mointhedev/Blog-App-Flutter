@@ -1,12 +1,15 @@
 import 'package:blog_app/eye_widget.dart';
+import 'package:blog_app/firebase_notif.dart';
 import 'package:blog_app/spinner.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'button_widget.dart';
 import 'constants.dart';
 import 'text_form_field.dart';
+import 'blog_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -30,6 +33,16 @@ class _LoginScreenState extends State<LoginScreen> {
 
   FirebaseAuth _auth = FirebaseAuth.instance;
   Firestore _firestore = Firestore.instance;
+  FirebaseMessaging fm;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    fm = FirebaseMessaging();
+    fm.unsubscribeFromTopic('all');
+    print('Unsubscribed successfully');
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
